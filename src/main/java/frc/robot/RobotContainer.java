@@ -11,8 +11,10 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.commands.DriveWithJoysticksCommand;
 import frc.robot.commands.HopperCommand;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -32,8 +34,8 @@ public class RobotContainer {
   private final HopperSubsystem m_hopperSubsystem = new HopperSubsystem();
   private final HopperCommand m_hopperCommand = new HopperCommand(m_hopperSubsystem, 1.0);
   
-  
-
+  private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
+  private final IntakeCommand m_intakeCommand = new IntakeCommand(m_intakeSubsystem);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -54,6 +56,7 @@ public class RobotContainer {
     JoystickButton A=new JoystickButton(driverOI,1);
     A.whenPressed(m_hopperCommand);
     JoystickButton B=new JoystickButton(driverOI,2);
+    B.whenPressed(m_intakeCommand);
     JoystickButton X=new JoystickButton(driverOI,3);
     JoystickButton Y=new JoystickButton(driverOI,4);
     JoystickButton LEFT_BUMPER=new JoystickButton(driverOI,5);
