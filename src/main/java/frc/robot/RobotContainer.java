@@ -28,6 +28,7 @@ import frc.robot.commands.HangReachCommand;
 import frc.robot.commands.HopperCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.IntakeHomeCommand;
+import frc.robot.commands.LimelightCommand;
 import frc.robot.commands.autonomous.AutonomousCommand;
 import frc.robot.commands.autonomous.AutonomousCommand1;
 import frc.robot.commands.autonomous.AutonomousCommandNoLime;
@@ -61,8 +62,8 @@ public class RobotContainer {
   public  Joystick driverOI;
   public static  Joystick coDriverOI;
   // The robot's subsystems and commands are defined here...
-  private  DriveSubsystem m_driveSubsystem;
-  private  LimeLightSubsystem m_LimeLightSubsystem;
+  public static  DriveSubsystem m_driveSubsystem;
+  public static  LimeLightSubsystem m_LimeLightSubsystem;
   private  DriveWithJoysticksCommand m_DriveWithJoysticksCommand;
   public  HopperSubsystem m_hopperSubsystem;
   private  HopperCommand m_hopperCommand;
@@ -181,7 +182,7 @@ public class RobotContainer {
     dPadLeft.whenPressed(new DeployIntakeCommand(mIntakeSubsystem, -1));
     dPadUp.whileHeld(new HangReachCommand(mhang));
     dPadDown.whileHeld(new HangPullCommand(mhang));
-
+    RIGHT_BUMPERc.whileHeld(new LimelightCommand());
   }
 
   public Command getDriveCommand() {

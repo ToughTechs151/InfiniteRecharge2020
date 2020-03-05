@@ -70,6 +70,8 @@ public class DriveSubsystem extends SubsystemBase {
     //  SmartDashboard.putNumber("Port "+0, pdp.getCurrent(0));
     //}
   }
+  private double leftDrive;
+  private double rightDrive;
 
   /**
    * A set of instructions to interpret input
@@ -81,23 +83,8 @@ public class DriveSubsystem extends SubsystemBase {
 
     speedMultiplier = oi.getRawButton(Constants.RIGHT_BUMPER) ? crawl : normal;
 
-    double leftDrive = deadzone(Math.sqrt(0.6)*oi.getRawAxis(Constants.LEFT_JOYSTICK_Y)+oi.getRawAxis(3)-oi.getRawAxis(2));
-    double rightDrive = deadzone(Math.sqrt(0.6)*oi.getRawAxis(Constants.RIGHT_JOYSTICK_Y)+oi.getRawAxis(3)-oi.getRawAxis(2));
-    double Kp = 0.125;
-    double tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
-    // checks for input from drive to allign to target.
-    if (oi.getRawButton(Constants.LEFT_BUMPER)){
-      //if (NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0) == 1) {
-        leftDrive*=.5;
-        rightDrive*=.5;
-        double steering_adjust = Kp * tx;
-        steering_adjust=steering_adjust < 0.3 ? steering_adjust : 0.3;
-        steering_adjust=steering_adjust > -0.3 ? steering_adjust : -0.3;
-        leftDrive -= steering_adjust;
-        rightDrive +=steering_adjust;
-      //}
-    }
-    
+    leftDrive = deadzone(Math.sqrt(0.6)*oi.getRawAxis(Constants.LEFT_JOYSTICK_Y)+oi.getRawAxis(3)-oi.getRawAxis(2));
+    rightDrive = deadzone(Math.sqrt(0.6)*oi.getRawAxis(Constants.RIGHT_JOYSTICK_Y)+oi.getRawAxis(3)-oi.getRawAxis(2));    
     if (deadzone(leftDrive) > 0.875)
       leftDrive*=leftBackward;
       //leftDrive = (1 - mechDeadband) / Math.pow(1 - softwareDeadband, 2) * Math.pow(leftDrive - softwareDeadband, 2)+ mechDeadband;
@@ -112,6 +99,15 @@ public class DriveSubsystem extends SubsystemBase {
       //rightDrive = (-1 + mechDeadband) / Math.pow(-1 + softwareDeadband, 2) * Math.pow(rightDrive + softwareDeadband, 2)- mechDeadband;
     // */
     drive(leftDrive * speedMultiplier, rightDrive * speedMultiplier);
+  }
+  public void adjust(double adjust){
+    leftDrive*=.5;
+    rightDrive*=.5;
+    adjust=adjust < 0.3 ? adjust : 0.3;
+    adjust=adjust > -0.3 ? adjust : -0.3;
+    leftDrive+=adjust;
+    rightDrive-=adjust;
+    
   }
 
   /**
