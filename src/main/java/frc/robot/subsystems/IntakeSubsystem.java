@@ -50,13 +50,13 @@ public class IntakeSubsystem extends SubsystemBase {
       resetEncoder();
     }
     if (direction==-1){
-      if(distance>-2.45){
+      if(distance>-2.35){
         deploy.set(direction*.5);
       }
       else{
         deploy.set(0);
       }//*/
-      return (distance)<=-2.45;
+      return (distance)<=-2.35;
     }
     else{
       if(distance<0){

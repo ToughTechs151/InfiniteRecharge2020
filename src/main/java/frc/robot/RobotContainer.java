@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AdjustLauncherCommand;
 import frc.robot.commands.ChangeLauncherSpeedCommand;
+import frc.robot.commands.DefaultHang;
 import frc.robot.commands.DriveWithJoysticksCommand;
 import frc.robot.commands.HangPullCommand;
 import frc.robot.commands.HangReachCommand;
@@ -29,6 +30,7 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.IntakeHomeCommand;
 import frc.robot.commands.autonomous.AutonomousCommand;
 import frc.robot.commands.autonomous.AutonomousCommand1;
+import frc.robot.commands.autonomous.AutonomousCommandNoLime;
 import frc.robot.commands.DeployIntakeCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HangSubsystem;
@@ -73,8 +75,10 @@ public class RobotContainer {
   private IntakeCommand reverseIntake;
   private AutonomousCommand AUTO;
   private AutonomousCommand1 AUTO1;
+  private AutonomousCommandNoLime AUTO2;
   private IntakeHomeCommand home;
   private HangSubsystem mhang;
+  private DefaultHang defaultHang;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -107,11 +111,15 @@ public class RobotContainer {
     reverseIntake = new IntakeCommand(mIntakeSubsystem, 0.3);
     AUTO = new AutonomousCommand(m_driveSubsystem, mLauncherSubsystem, m_LimeLightSubsystem, m_hopperSubsystem);
     AUTO1 = new AutonomousCommand1(m_driveSubsystem, mLauncherSubsystem, m_LimeLightSubsystem, m_hopperSubsystem);
+    AUTO2 = new AutonomousCommandNoLime(m_driveSubsystem, mLauncherSubsystem, m_LimeLightSubsystem, m_hopperSubsystem);
     home=new IntakeHomeCommand(mIntakeSubsystem);
     mhang=new HangSubsystem();
+    defaultHang=new DefaultHang(mhang);
     CommandScheduler.getInstance().setDefaultCommand(m_driveSubsystem, m_DriveWithJoysticksCommand);
+    CommandScheduler.getInstance().setDefaultCommand(mhang, defaultHang);
     chooser.addOption("limeLight disabled", AUTO1);
     chooser.addOption("limeLight enabled", AUTO);
+    chooser.addOption("no limelight usage", AUTO2);
     SmartDashboard.putData("Autonomous mode:",chooser);
   }
 
@@ -130,7 +138,7 @@ public class RobotContainer {
     JoystickButton Xc = new JoystickButton(coDriverOI, 3);
     Xc.whenPressed(new ChangeLauncherSpeedCommand(2750, mLauncherSubsystem));// 2950
     JoystickButton Yc = new JoystickButton(coDriverOI, 4);
-    Yc.whenPressed(new ChangeLauncherSpeedCommand(3000,mLauncherSubsystem));// 3750
+    Yc.whenPressed(new ChangeLauncherSpeedCommand(3300,mLauncherSubsystem));// 3750
     JoystickButton LEFT_BUMPERc = new JoystickButton(coDriverOI, 5);
     LEFT_BUMPERc.whenHeld(new ChangeLauncherSpeedCommand(-500, mLauncherSubsystem));
     JoystickButton RIGHT_BUMPERc = new JoystickButton(coDriverOI, 6);
@@ -171,8 +179,8 @@ public class RobotContainer {
     };
     dPadRight.whenPressed(new DeployIntakeCommand(mIntakeSubsystem, 1));
     dPadLeft.whenPressed(new DeployIntakeCommand(mIntakeSubsystem, -1));
-    dPadUp.whenPressed(new HangReachCommand(mhang));
-    dPadDown.whenPressed(new HangPullCommand(mhang));
+    dPadUp.whileHeld(new HangReachCommand(mhang));
+    dPadDown.whileHeld(new HangPullCommand(mhang));
 
   }
 

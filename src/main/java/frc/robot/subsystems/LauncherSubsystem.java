@@ -85,7 +85,7 @@ public class LauncherSubsystem extends PIDSubsystem {
       }
     }
     output=getController().calculate(output,setpoint)/lEncoder.getVelocityConversionFactor();
-    launcher1.set(output*0.95);
+    launcher1.set(output*0.9);
     launcher2.set(output);
 	
   }

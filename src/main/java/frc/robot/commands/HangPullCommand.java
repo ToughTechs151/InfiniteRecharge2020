@@ -16,7 +16,10 @@ public class HangPullCommand extends CommandBase{
     }
     public void execute(){
         hang.pull();
-        time.schedule(new TimerTask(){
+        /*if(hang.hanger.getSelectedSensorPosition()<=hang.startpoint+5000)
+            fin=true;*/
+        /*
+        try{time.schedule(new TimerTask(){
 
             @Override
             public void run() {
@@ -25,6 +28,10 @@ public class HangPullCommand extends CommandBase{
             }
             
         }, 5000);
+        }
+        catch(Exception e){
+            
+        }*/
         
     }
     @Override
@@ -33,6 +40,11 @@ public class HangPullCommand extends CommandBase{
     }
     public void end(boolean interrupted){
         hang.stop();
+        try {
+            time.cancel();
+        } catch (Exception e) {
+            //TODO: handle exception
+        }
         fin=false;
     }
 }

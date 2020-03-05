@@ -35,7 +35,7 @@ public class AutonomousCommand1 extends CommandGroupBase {
       addRequirements(lime);
       addRequirements(hopperSubsystem);
       solo=new DefaultDrive(drive,0.5);
-      addCommands(new ChangeLauncherSpeedCommand(2950,launcherSubsystem),new WaitCommand(2),
+      addCommands(new ChangeLauncherSpeedCommand(2750,launcherSubsystem),new WaitCommand(2),
                 new HopperCommand(hopperSubsystem, Constants.HOPPER_SPEED),
                 solo,new WaitCommand(1),new DefaultDrive(drive, 0));
    }

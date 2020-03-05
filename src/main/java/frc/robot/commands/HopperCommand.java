@@ -28,6 +28,7 @@ public class HopperCommand extends CommandBase {
   private boolean prevState=true;
   private double speed;
   private boolean auto=false;
+  private int times = 0;
   /**
    * hopper command constructor
    * @param subsystem the hopper subsystem
@@ -115,10 +116,13 @@ public class HopperCommand extends CommandBase {
 
           @Override
           public void run() {
-            fin=true;
+            times++;
+            if (times>3){
+              fin=true;
+            }
 
           }
-        }, 5000);
+        }, 1000);
       }
     }
   }
