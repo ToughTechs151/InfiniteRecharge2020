@@ -28,7 +28,6 @@ public class AutonomousCommand extends CommandGroupBase {
    private DriveSoloCommand solo;
    private CommandGroupBase auto;
    private boolean done=false;
-   private Timer time=new Timer();
    public AutonomousCommand(DriveSubsystem drive, LauncherSubsystem launcherSubsystem,LimeLightSubsystem lime, HopperSubsystem hopperSubsystem) {      
       this.drive = drive;
       this.launcherSubsystem = launcherSubsystem;
