@@ -67,6 +67,7 @@ public class HopperCommand extends CommandBase {
    */
   @Override
   public void execute() {
+    boolean launch=coDrive.getRawButton(Constants.RIGHT_BUMPER);
     if(coDrive.getRawButton(Constants.LEFT_BUMPER)){
       if(m_hopperSubsystem.getHopperSwitch2()){
         m_hopperSubsystem.stop();
@@ -79,7 +80,7 @@ public class HopperCommand extends CommandBase {
     }
     else if (!coDrive.getRawButton(Constants.LEFT_BUMPER)){
       //check for ready ball and command to launch
-      if(auto||(coDrive.getRawButton(Constants.RIGHT_BUMPER)&&!m_hopperSubsystem.getHopperSwitch2())){
+      if(auto||(launch&&!m_hopperSubsystem.getHopperSwitch2())){
         if(prevState){
           prevState=false;
           m_hopperSubsystem.stop();
@@ -104,7 +105,7 @@ public class HopperCommand extends CommandBase {
         Robot.m_robotContainer.getStopIntakeCommand().schedule();
       }
       //check for intent to launch or if there is a ball to intake without forcing into the launcher
-      else if((coDrive.getRawButton(Constants.RIGHT_BUMPER))||(!m_hopperSubsystem.getHopperSwitchState())){
+      else if((launch)||(!m_hopperSubsystem.getHopperSwitchState())){
         m_hopperSubsystem.start(speed);
       }
       else if(m_hopperSubsystem.getHopperSwitchState()) {
