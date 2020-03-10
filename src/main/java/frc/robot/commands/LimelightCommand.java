@@ -16,13 +16,40 @@ public class LimelightCommand extends PIDCommand {
     private static LimeLightSubsystem limelight = RobotContainer.m_LimeLightSubsystem;
     private static DriveSubsystem drive = RobotContainer.m_driveSubsystem;
     private static PIDController pidController = new PIDController(0.125, 0.0001, 0);
+    private static DoubleSupplier doubleSupplier=new DoubleSupplier(){
+    
+        @Override
+        public double getAsDouble() {
+            return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
+        }
+    };
+    private static DoubleConsumer doubleConsumer = new DoubleConsumer(){
+    
+        @Override
+        public void accept(double arg0) {
+            drive.adjust(arg0);
+        }
+    };
+    private boolean fin = false;
 
     public LimelightCommand() {
-        super(pidController, (DoubleSupplier) limelight, 0, (DoubleConsumer) drive, limelight);
+        super(pidController,  doubleSupplier, 0, doubleConsumer, limelight);
     }
 
     @Override
     public void execute(){
-        drive.adjust(pidController.calculate(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0)));
+        double adjust=pidController.calculate(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0));
+        doubleConsumer.accept(adjust);
+        if(adjust==0){
+            fin=true;
+        }
+    }
+    @Override
+    public boolean isFinished(){
+        return fin;
+    }
+    @Override
+    public void end(boolean interrupted){
+
     }
 }

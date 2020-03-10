@@ -70,11 +70,11 @@ public final class Constants {
   public static final int BACK_LEFT = 12;
   //Final Variables
   @Log
-  public static double LAUNCHERKP=0.0003;
+  public static double LAUNCHERKP=0.00016;
   @Log
-  public static double LAUNCHERKI=0.00032;
+  public static double LAUNCHERKI=0.00048;
   @Log
-  public static double LAUNCHERKD=0.000000003;
+  public static double LAUNCHERKD=0.0000016;
   @Log
   public static double HOPPER_SPEED = 1;
   @Config

@@ -1,9 +1,9 @@
 package frc.robot.commands;
 
+import java.util.Timer;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.HangSubsystem;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class HangReachCommand extends CommandBase{
     private HangSubsystem hang;

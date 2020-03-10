@@ -7,8 +7,6 @@
 
 package frc.robot;
 
-import java.util.function.BooleanSupplier;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -22,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AdjustLauncherCommand;
 import frc.robot.commands.ChangeLauncherSpeedCommand;
 import frc.robot.commands.DefaultHang;
+import frc.robot.commands.DeployIntakeCommand;
 import frc.robot.commands.DriveWithJoysticksCommand;
 import frc.robot.commands.HangPullCommand;
 import frc.robot.commands.HangReachCommand;
@@ -32,7 +31,7 @@ import frc.robot.commands.LimelightCommand;
 import frc.robot.commands.autonomous.AutonomousCommand;
 import frc.robot.commands.autonomous.AutonomousCommand1;
 import frc.robot.commands.autonomous.AutonomousCommandNoLime;
-import frc.robot.commands.DeployIntakeCommand;
+import frc.robot.commands.autonomous.LauncherTester;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HangSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
@@ -40,13 +39,6 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LauncherSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.PDPSubsystem;
-import frc.robot.commands.IntakeCommand;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import io.github.oblarg.oblog.Logger;
 
 /**
@@ -121,6 +113,7 @@ public class RobotContainer {
     chooser.addOption("limeLight disabled", AUTO1);
     chooser.addOption("limeLight enabled", AUTO);
     chooser.addOption("no limelight usage", AUTO2);
+    chooser.addOption("test launcher", new LauncherTester(m_driveSubsystem, mLauncherSubsystem, m_LimeLightSubsystem, m_hopperSubsystem));
     SmartDashboard.putData("Autonomous mode:",chooser);
   }
 
