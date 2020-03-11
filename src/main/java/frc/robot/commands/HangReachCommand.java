@@ -43,7 +43,6 @@ public class HangReachCommand extends CommandBase{
         try {
             time.cancel();
         } catch (Exception e) {
-            //TODO: handle exception
         }
         fin=false;
     }

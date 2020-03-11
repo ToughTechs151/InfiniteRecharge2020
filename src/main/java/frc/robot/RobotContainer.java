@@ -31,7 +31,6 @@ import frc.robot.commands.LimelightCommand;
 import frc.robot.commands.autonomous.AutonomousCommand;
 import frc.robot.commands.autonomous.AutonomousCommand1;
 import frc.robot.commands.autonomous.AutonomousCommandNoLime;
-import frc.robot.commands.autonomous.LauncherTester;
 import frc.robot.commands.autonomous.TestAuto;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HangSubsystem;
@@ -39,7 +38,6 @@ import frc.robot.subsystems.HopperSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LauncherSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
-import frc.robot.subsystems.PDPSubsystem;
 import io.github.oblarg.oblog.Logger;
 
 /**
@@ -60,7 +58,6 @@ public class RobotContainer {
   private  DriveWithJoysticksCommand m_DriveWithJoysticksCommand;
   public  HopperSubsystem m_hopperSubsystem;
   private  HopperCommand m_hopperCommand;
-  private PDPSubsystem pdp;
   public static PIDController launcherPID;
   private LauncherSubsystem mLauncherSubsystem;
   public IntakeSubsystem mIntakeSubsystem;
@@ -136,10 +133,11 @@ public class RobotContainer {
     Yc.whenPressed(new ChangeLauncherSpeedCommand(3300,mLauncherSubsystem));// 3750
     JoystickButton LEFT_BUMPERc = new JoystickButton(coDriverOI, 5);
     LEFT_BUMPERc.whenHeld(new ChangeLauncherSpeedCommand(-500, mLauncherSubsystem));
-    JoystickButton RIGHT_BUMPERc = new JoystickButton(coDriverOI, 6);
+    //JoystickButton RIGHT_BUMPERc = new JoystickButton(coDriverOI, 6);
+    JoystickButton RIGHT_BUMPER = new JoystickButton(driverOI, 6);
     //RIGHT_BUMPERc.whenHeld(m_hopperCommand);
-    JoystickButton BACK = new JoystickButton(driverOI, 7);
-    JoystickButton START = new JoystickButton(driverOI, 8);
+    //JoystickButton BACK = new JoystickButton(driverOI, 7);
+    //JoystickButton START = new JoystickButton(driverOI, 8);
     JoystickButton A = new JoystickButton(driverOI, 1);
     A.whenPressed(feedIntakeCommand);
     JoystickButton B = new JoystickButton(driverOI, 2);
@@ -176,7 +174,7 @@ public class RobotContainer {
     dPadLeft.whenPressed(new DeployIntakeCommand(mIntakeSubsystem, -1));
     dPadUp.whileHeld(new HangReachCommand(mhang));
     dPadDown.whileHeld(new HangPullCommand(mhang));
-    RIGHT_BUMPERc.whileHeld(new LimelightCommand());
+    RIGHT_BUMPER.whileHeld(new LimelightCommand());
   }
 
   public Command getDriveCommand() {

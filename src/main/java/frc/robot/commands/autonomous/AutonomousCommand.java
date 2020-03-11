@@ -14,18 +14,10 @@ import frc.robot.subsystems.LauncherSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
 
 public class AutonomousCommand extends CommandGroupBase {
-   private DriveSubsystem drive;
-   private LauncherSubsystem launcherSubsystem;
-   private LimeLightSubsystem lime;
-   private HopperSubsystem hopperSubsystem;
    private DriveSoloCommand solo;
    private CommandGroupBase auto;
    private boolean done=false;
    public AutonomousCommand(DriveSubsystem drive, LauncherSubsystem launcherSubsystem,LimeLightSubsystem lime, HopperSubsystem hopperSubsystem) {      
-      this.drive = drive;
-      this.launcherSubsystem = launcherSubsystem;
-      this.lime=lime;
-      this.hopperSubsystem=hopperSubsystem;
       addRequirements(drive);
       addRequirements(launcherSubsystem);
       addRequirements(lime);

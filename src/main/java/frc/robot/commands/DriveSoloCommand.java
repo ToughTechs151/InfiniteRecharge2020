@@ -1,28 +1,22 @@
 package frc.robot.commands;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveSoloCommand extends CommandBase{
     private DriveSubsystem drive;
     private LimeLightSubsystem lime;
     private double left,right,z,startZ;
-    private boolean fin=false,first=true;
+    private boolean fin=false;
     private double leftAdjust,rightAdjust;
     private double lastTime = 0;
     private double firstTime = 0;
-    private Timer timer = new Timer();
-    private NetworkTable network = NetworkTableInstance.getDefault().getTable("Timer between execute Drive autonomous");
-    private NetworkTableEntry networkEntry = network.getEntry("TIME");
     
-    public DriveSoloCommand(DriveSubsystem drive,LimeLightSubsystem lime,double x,double y,double z){
+    public DriveSoloCommand(DriveSubsystem drive, LimeLightSubsystem lime, double x, double y, double z) {
         this.drive=drive;
         
         this.lime=lime;
@@ -65,7 +59,7 @@ public class DriveSoloCommand extends CommandBase{
         else{
             drive.drive(leftAdjust,rightAdjust);
         }
-        lastTime = timer.getFPGATimestamp();
+        lastTime = Timer.getFPGATimestamp();
         SmartDashboard.putNumber("Timing within execute", lastTime - firstTime);
     }
     public boolean isFinished(){

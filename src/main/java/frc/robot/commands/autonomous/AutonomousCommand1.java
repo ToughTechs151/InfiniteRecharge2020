@@ -1,7 +1,5 @@
 package frc.robot.commands.autonomous;
 
-import java.util.Timer;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandGroupBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -15,21 +13,12 @@ import frc.robot.subsystems.LauncherSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
 
 public class AutonomousCommand1 extends CommandGroupBase {
-    private DriveSubsystem drive;
-    private LauncherSubsystem launcherSubsystem;
-    private LimeLightSubsystem lime;
-    private HopperSubsystem hopperSubsystem;
     private DefaultDrive solo;
     private CommandGroupBase auto;
     private boolean done = false;
-    private Timer time = new Timer();
 
     public AutonomousCommand1(DriveSubsystem drive, LauncherSubsystem launcherSubsystem, LimeLightSubsystem lime,
             HopperSubsystem hopperSubsystem) {
-        this.drive = drive;
-      this.launcherSubsystem = launcherSubsystem;
-      this.lime=lime;
-      this.hopperSubsystem=hopperSubsystem;
       addRequirements(drive);
       addRequirements(launcherSubsystem);
       addRequirements(lime);

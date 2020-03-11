@@ -35,7 +35,6 @@ public class LauncherSubsystem extends PIDSubsystem {
   private double setpoint = 0,count=0;
   private boolean counting = true,checker=true;
   private Timer time=new Timer();
-  private static int counter = 0;
   private ArrayList<Double> prevOutput = new ArrayList<>();
   private static SpeedControllerGroup launcher = new SpeedControllerGroup(launcher1, launcher2);
   private ArrayList<Double> prevTime = new ArrayList<>();
@@ -66,7 +65,7 @@ public class LauncherSubsystem extends PIDSubsystem {
     setpoint = set;
     count = 0;
     SmartDashboard.putBoolean("You may fire when ready", false);
-    
+
     counting = true;
     checker = true;
     try {
@@ -85,7 +84,7 @@ public class LauncherSubsystem extends PIDSubsystem {
    */
   public void periodic() {
     // setSetpoint(RobotContainer.coDriverOI.getY()); NEVER EVER DO THIS
-    useOutput((lEncoder2.getVelocity()+lEncoder.getVelocity())/2, setpoint);
+    useOutput((lEncoder2.getVelocity() + lEncoder.getVelocity()) / 2, setpoint);
     SmartDashboard.putNumber("Launcher1Speed in RPM", lEncoder.getVelocity());
     SmartDashboard.putNumber("Launcher2Speed in RPM", lEncoder2.getVelocity());
     SmartDashboard.putNumber("Launcher Current 1", launcher1.getOutputCurrent());
@@ -105,20 +104,19 @@ public class LauncherSubsystem extends PIDSubsystem {
     if (this.setpoint == 0) {
       setpoint = (getController().getSetpoint() * 0.9);
     }
-    
-    if (Math.abs(setpoint) >= Math.abs(getController().getSetpoint())) { 
-      setpoint= (getController().getSetpoint() * 10.0 / 9.0); 
-    } 
-    else if (Math.abs(setpoint)< Math.abs(getController().getSetpoint())) { 
-      setpoint=(getController().getSetpoint() * 0.9); 
+
+    if (Math.abs(setpoint) >= Math.abs(getController().getSetpoint())) {
+      setpoint = (getController().getSetpoint() * 10.0 / 9.0);
+    } else if (Math.abs(setpoint) < Math.abs(getController().getSetpoint())) {
+      setpoint = (getController().getSetpoint() * 0.9);
     }
-     
+
     count += counting ? 1 : 0;
     if (setpoint >= this.setpoint * 0.98 && setpoint <= this.setpoint * 1.02) {
       setpoint = this.setpoint;
-    } 
-    else if(setpoint<=100&&setpoint>=-100){ setpoint=this.setpoint*.1; }
-      
+    } else if (setpoint <= 100 && setpoint >= -100) {
+      setpoint = this.setpoint * .1;
+    }
 
     output = getController().calculate(output, setpoint);
     launcher1.set(output * 0.9 / lEncoder.getVelocityConversionFactor());
@@ -137,7 +135,6 @@ public class LauncherSubsystem extends PIDSubsystem {
       SmartDashboard.putNumber("Time to reach speed", time.get());
       SmartDashboard.putBoolean("You may fire when ready", true);
       counting = false;
-      counter++;
       checker = false;
     }
     prevOutput.add(lEncoder.getVelocity());
@@ -159,9 +156,5 @@ public class LauncherSubsystem extends PIDSubsystem {
   public static void setSpeed(double s) {
     launcher.set(s / lEncoder.getVelocityConversionFactor());
 
-  }
-
-  public static void resetCounter() {
-    counter=0;
   }
 }
