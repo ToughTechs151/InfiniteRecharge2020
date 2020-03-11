@@ -29,9 +29,11 @@ public class LauncherSubsystem extends PIDSubsystem {
   private static CANEncoder lEncoder2 = new CANEncoder(launcher2);
   //private static Talon launcher1 = new Talon(Constants.Launcher1);
   //private static Talon launcher2 = new Talon(Constants.Launcher2);
-  private double setpoint = 0,count=0;
-  private boolean counting = true,checker=true;
-  private Timer time=new Timer();
+  private double setpoint = 0;
+  private static double count = 0;
+  private static boolean counting = true;
+  private static boolean checker = true;
+  private static Timer time = new Timer();
   private ArrayList<Double> prevOutput = new ArrayList<>();
   private static SpeedControllerGroup launcher = new SpeedControllerGroup(launcher1, launcher2);
   private ArrayList<Double> prevTime = new ArrayList<>();
@@ -76,6 +78,22 @@ public class LauncherSubsystem extends PIDSubsystem {
 
   }
 
+  public static void reset() {
+    count = 0;
+    SmartDashboard.putBoolean("You may fire when ready", false);
+
+    counting = true;
+    checker = true;
+    try {
+      time.reset();
+    } catch (Exception e) {
+    }
+    try {
+      time.start();
+    } catch (Exception e) {
+    }
+
+  }
   /**
    * runs periodically when enabled
    */

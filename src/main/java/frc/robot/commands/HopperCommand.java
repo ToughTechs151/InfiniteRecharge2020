@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.HopperSubsystem;
+import frc.robot.subsystems.LauncherSubsystem;
 /**
  * Command to feed Launcher
  */
@@ -21,7 +22,7 @@ public class HopperCommand extends CommandBase {
   private HopperSubsystem m_hopperSubsystem;
   private Joystick coDrive = new Joystick(9);
   private Timer time;
-  private boolean prevState=true;
+  //private boolean prevState=true;
   private double speed;
   private boolean auto=false;
   private int times = 0;
@@ -47,7 +48,7 @@ public class HopperCommand extends CommandBase {
     speed=hopperSpeed;
     m_hopperSubsystem=hopperSubsystem;
     addRequirements(hopperSubsystem);
-    prevState=true;
+    //prevState=true;
     time=new Timer();
     auto=true;
     coDrive=new Joystick(3);
@@ -80,7 +81,7 @@ public class HopperCommand extends CommandBase {
     else if (!coDrive.getRawButton(Constants.LEFT_BUMPER)){
       //check for ready ball and command to launch
       if((auto||(launch&&!m_hopperSubsystem.getHopperSwitch2()))&&fire){
-        if(prevState){
+        /*if(prevState){
           prevState=false;
           m_hopperSubsystem.stop();
           time.schedule(new TimerTask(){
@@ -95,7 +96,8 @@ public class HopperCommand extends CommandBase {
                 }
               },250);
             }
-          },2000);
+          },2000);//*/
+          LauncherSubsystem.reset();
           if(auto){
             time.schedule(new TimerTask(){
     
@@ -124,7 +126,7 @@ public class HopperCommand extends CommandBase {
         }
       }
     }
-  }
+  
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
