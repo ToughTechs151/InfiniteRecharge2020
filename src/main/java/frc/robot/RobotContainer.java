@@ -32,6 +32,7 @@ import frc.robot.commands.autonomous.AutonomousCommand;
 import frc.robot.commands.autonomous.AutonomousCommand1;
 import frc.robot.commands.autonomous.AutonomousCommandNoLime;
 import frc.robot.commands.autonomous.LauncherTester;
+import frc.robot.commands.autonomous.TestAuto;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HangSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
@@ -113,7 +114,7 @@ public class RobotContainer {
     chooser.addOption("limeLight disabled", AUTO1);
     chooser.addOption("limeLight enabled", AUTO);
     chooser.addOption("no limelight usage", AUTO2);
-    chooser.addOption("test launcher", new LauncherTester(m_driveSubsystem, mLauncherSubsystem, m_LimeLightSubsystem, m_hopperSubsystem));
+    chooser.addOption("test launcher", new TestAuto(mLauncherSubsystem, m_hopperSubsystem));
     SmartDashboard.putData("Autonomous mode:",chooser);
   }
 

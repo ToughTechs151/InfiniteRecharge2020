@@ -10,6 +10,7 @@ package frc.robot.commands;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -50,6 +51,7 @@ public class HopperCommand extends CommandBase {
     speed=hopperSpeed;
     m_hopperSubsystem=hopperSubsystem;
     addRequirements(hopperSubsystem);
+    prevState=true;
     time=new Timer();
     auto=true;
     coDrive=new Joystick(3);
@@ -67,6 +69,7 @@ public class HopperCommand extends CommandBase {
    */
   @Override
   public void execute() {
+    boolean fire = SmartDashboard.getBoolean("You may fire when ready",false);
     boolean launch=coDrive.getRawButton(Constants.RIGHT_BUMPER);
     if(coDrive.getRawButton(Constants.LEFT_BUMPER)){
       if(m_hopperSubsystem.getHopperSwitch2()){
@@ -80,7 +83,7 @@ public class HopperCommand extends CommandBase {
     }
     else if (!coDrive.getRawButton(Constants.LEFT_BUMPER)){
       //check for ready ball and command to launch
-      if(auto||(launch&&!m_hopperSubsystem.getHopperSwitch2())){
+      if((auto||(launch&&!m_hopperSubsystem.getHopperSwitch2()))&&fire){
         if(prevState){
           prevState=false;
           m_hopperSubsystem.stop();
@@ -97,40 +100,43 @@ public class HopperCommand extends CommandBase {
               },250);
             }
           },2000);
-        }
-      }
-      //check to see if the hopper should stop
-      else if(!m_hopperSubsystem.getHopperSwitch2()){
-        m_hopperSubsystem.stop();
-        Robot.m_robotContainer.getStopIntakeCommand().schedule();
-      }
-      //check for intent to launch or if there is a ball to intake without forcing into the launcher
-      else if((launch)||(!m_hopperSubsystem.getHopperSwitchState())){
-        m_hopperSubsystem.start(speed);
-      }
-      else if(m_hopperSubsystem.getHopperSwitchState()) {
-        m_hopperSubsystem.stop();
-      }
-      if(auto){
-        time.schedule(new TimerTask(){
-
-          @Override
-          public void run() {
-            times++;
-            if (times>3){
-              fin=true;
-            }
-
+          if(auto){
+            time.schedule(new TimerTask(){
+    
+              @Override
+              public void run() {
+                times++;
+                if (times>3){
+                  fin=true;
+                }
+    
+              }
+            }, 1000);
+         }
+          //check to see if the hopper should stop
+          else if(!m_hopperSubsystem.getHopperSwitch2()){
+            m_hopperSubsystem.stop();
+            Robot.m_robotContainer.getStopIntakeCommand().schedule();
           }
-        }, 1000);
+          //check for intent to launch or if there is a ball to intake without forcing into the launcher
+          else if((launch&&fire)||(!m_hopperSubsystem.getHopperSwitchState())){
+            m_hopperSubsystem.start(speed);
+          }
+          else if(m_hopperSubsystem.getHopperSwitchState()) {
+            m_hopperSubsystem.stop();
+          }
+        }
       }
     }
   }
-
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_hopperSubsystem.stop();
+    try {
+      time.cancel();
+    } catch (Exception e) {
+    }
   }
 
   // Returns true when the command should end.
