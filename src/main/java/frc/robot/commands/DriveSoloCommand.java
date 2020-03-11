@@ -1,3 +1,8 @@
+/**
+ * Coded by Seth White
+ * Timing code by Emily Guo
+ * Credit to WPI and ctre for their FIRST oriented objects.
+ */
 package frc.robot.commands;
 
 import edu.wpi.first.networktables.NetworkTableInstance;

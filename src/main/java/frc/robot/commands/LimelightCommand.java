@@ -1,3 +1,7 @@
+/**
+ * Coded by Seth White
+ * Credit to WPI and ctre for their FIRST oriented objects.
+ */
 package frc.robot.commands;
 
 import java.util.function.DoubleConsumer;

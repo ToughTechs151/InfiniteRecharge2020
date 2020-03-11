@@ -1,4 +1,8 @@
 package frc.robot.subsystems;
+/**
+ * Coded by Seth White
+ * Credit to WPI and ctre for their FIRST oriented objects.
+ */
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 

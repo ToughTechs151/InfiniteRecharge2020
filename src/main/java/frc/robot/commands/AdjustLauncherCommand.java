@@ -1,4 +1,8 @@
 
+/**
+ * Coded by Seth White
+ * Credit to WPI, Limelight, and ctre for their FIRST oriented objects.
+ */
 package frc.robot.commands;
 
 import java.util.Timer;
