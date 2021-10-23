@@ -63,10 +63,12 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
+    m_robotContainer.disableLEnabled();
   }
 
   @Override
   public void disabledPeriodic() {
+    m_robotContainer.disableLEnabled();
   }
 
   /**
