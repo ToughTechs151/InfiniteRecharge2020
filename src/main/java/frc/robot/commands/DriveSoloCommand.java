@@ -20,7 +20,6 @@ public class DriveSoloCommand extends CommandBase{
     private double firstTime = 0;
     private Timer timer = new Timer();
     private NetworkTable network = NetworkTableInstance.getDefault().getTable("Timer between execute Drive autonomous");
-    private NetworkTableEntry networkEntry = network.getEntry("TIME");
     
     public DriveSoloCommand(DriveSubsystem drive,LimeLightSubsystem lime,double x,double y,double z){
         this.drive=drive;
@@ -73,7 +72,6 @@ public class DriveSoloCommand extends CommandBase{
     }
     public void end(boolean interrupted){
         drive.drive(0.0, 0.0);
-
     }
 
 

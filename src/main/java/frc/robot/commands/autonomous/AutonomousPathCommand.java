@@ -21,28 +21,22 @@ import frc.robot.subsystems.UpperLauncherSubsystem;
 import frc.robot.subsystems.LowerLauncherSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
 
-public class AutonomousCommand extends CommandGroupBase {
+public class AutonomousPathCommand extends CommandGroupBase {
    private DriveSubsystem drive;
-   private UpperLauncherSubsystem mUpperLauncherSubsystem;
-   private LowerLauncherSubsystem mLowerLauncherSubsystem;
    private LimeLightSubsystem lime;
-   private HopperSubsystem hopperSubsystem;
+   //private HopperSubsystem hopperSubsystem;
    private DriveSoloCommand solo;
+   private DriveSoloCommand solo2;
    private CommandGroupBase auto;
    private boolean done=false;
    private Timer time=new Timer();
-   public AutonomousCommand(DriveSubsystem drive, UpperLauncherSubsystem upperLauncherSubsystem, LowerLauncherSubsystem lowerLauncherSubsystem, LimeLightSubsystem lime, HopperSubsystem hopperSubsystem) {      
+   public AutonomousPathCommand(DriveSubsystem drive, LimeLightSubsystem lime) {      
       this.drive = drive;
-      this.mUpperLauncherSubsystem = upperLauncherSubsystem;
-      this.mLowerLauncherSubsystem = lowerLauncherSubsystem;
-      this.lime=lime;
-      this.hopperSubsystem=hopperSubsystem;
+      this.lime = lime;
       addRequirements(drive);
-      addRequirements(mUpperLauncherSubsystem);
-      addRequirements(lime);
-      addRequirements(hopperSubsystem);
       solo=new DriveSoloCommand(drive, lime, 0.5, 0.5, 60);
-      addCommands(new ChangeLauncherSpeedCommand(3000,mUpperLauncherSubsystem, mLowerLauncherSubsystem),solo,new AdjustLauncherCommand(mUpperLauncherSubsystem, mLowerLauncherSubsystem, lime),new WaitCommand(4),new HopperCommand(hopperSubsystem, Constants.HOPPER_SPEED));
+
+      addCommands(solo);
    }
 
    public void inititialize(){

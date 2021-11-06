@@ -4,6 +4,7 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
+//With intake
 
 package frc.robot;
 
@@ -34,9 +35,12 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HangSubsystem;
 import frc.robot.subsystems.HopperSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.LauncherSubsystem;
+import frc.robot.subsystems.IntakeWheelsSubsystem;
+import frc.robot.subsystems.UpperLauncherSubsystem;
+import frc.robot.subsystems.LowerLauncherSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.PDPSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.commands.IntakeCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -45,6 +49,8 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import io.github.oblarg.oblog.Logger;
+import edu.wpi.first.wpilibj.Relay;
+import frc.robot.commands.SetLEDCommand;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -65,17 +71,23 @@ public class RobotContainer {
   public  HopperSubsystem m_hopperSubsystem;
   private  HopperCommand m_hopperCommand;
   private PDPSubsystem pdp;
-  public static PIDController launcherPID;
-  private LauncherSubsystem mLauncherSubsystem;
+  public static PIDController upperLauncherPID;
+  public static PIDController lowerLauncherPID;
+  private UpperLauncherSubsystem mUpperLauncherSubsystem;
+  private LowerLauncherSubsystem mLowerLauncherSubsystem;
   public IntakeSubsystem mIntakeSubsystem;
+  public IntakeWheelsSubsystem mIntakeWheelsSubsystem;
+  private LEDSubsystem mLEDSubsystem;
   private IntakeCommand feedIntakeCommand;
   private IntakeCommand stopIntakeCommand;
   private IntakeCommand reverseIntake;
   private AutonomousCommand AUTO;
   private AutonomousCommand1 AUTO1;
   private IntakeHomeCommand home;
-  private HangSubsystem mhang;
-
+  private HangSubsystem mhang; 
+  private SetLEDCommand onLEDCommand;
+  private SetLEDCommand offLEDCommand;
+  
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -99,14 +111,20 @@ public class RobotContainer {
     m_hopperSubsystem = new HopperSubsystem();
     m_hopperCommand = new HopperCommand(m_hopperSubsystem, .90, coDriverOI);
 
-    launcherPID = new PIDController(Constants.LAUNCHERKP, Constants.LAUNCHERKI, Constants.LAUNCHERKD);
-    mLauncherSubsystem = new LauncherSubsystem(launcherPID);
+    upperLauncherPID = new PIDController(Constants.LAUNCHERKP, Constants.LAUNCHERKI, Constants.LAUNCHERKD);
+    lowerLauncherPID = new PIDController(Constants.LAUNCHERKP, Constants.LAUNCHERKI, Constants.LAUNCHERKD);
+    mUpperLauncherSubsystem = new UpperLauncherSubsystem(upperLauncherPID);
+    mLowerLauncherSubsystem = new LowerLauncherSubsystem(lowerLauncherPID);
     mIntakeSubsystem = new IntakeSubsystem();
-    feedIntakeCommand = new IntakeCommand(mIntakeSubsystem, -0.3);
-    stopIntakeCommand = new IntakeCommand(mIntakeSubsystem, 0);
-    reverseIntake = new IntakeCommand(mIntakeSubsystem, 0.3);
-    AUTO = new AutonomousCommand(m_driveSubsystem, mLauncherSubsystem, m_LimeLightSubsystem, m_hopperSubsystem);
-    AUTO1 = new AutonomousCommand1(m_driveSubsystem, mLauncherSubsystem, m_LimeLightSubsystem, m_hopperSubsystem);
+    mIntakeWheelsSubsystem = new IntakeWheelsSubsystem();
+    mLEDSubsystem = new LEDSubsystem();
+    onLEDCommand = new SetLEDCommand(mLEDSubsystem, Relay.Value.kReverse);
+    offLEDCommand = new SetLEDCommand(mLEDSubsystem, Relay.Value.kOff);
+    feedIntakeCommand = new IntakeCommand(mIntakeWheelsSubsystem, -0.3);
+    stopIntakeCommand = new IntakeCommand(mIntakeWheelsSubsystem, 0);
+    reverseIntake = new IntakeCommand(mIntakeWheelsSubsystem, 0.3);
+    AUTO = new AutonomousCommand(m_driveSubsystem, mUpperLauncherSubsystem, mLowerLauncherSubsystem, m_LimeLightSubsystem, m_hopperSubsystem);
+    AUTO1 = new AutonomousCommand1(m_driveSubsystem, mUpperLauncherSubsystem, mLowerLauncherSubsystem, m_LimeLightSubsystem, m_hopperSubsystem);
     home=new IntakeHomeCommand(mIntakeSubsystem);
     mhang=new HangSubsystem();
     CommandScheduler.getInstance().setDefaultCommand(m_driveSubsystem, m_DriveWithJoysticksCommand);
@@ -124,15 +142,17 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     JoystickButton Ac = new JoystickButton(coDriverOI, 1);
-    Ac.whenPressed(new AdjustLauncherCommand(mLauncherSubsystem, m_LimeLightSubsystem));
+    Ac.whenPressed(new ChangeLauncherSpeedCommand(1000, mUpperLauncherSubsystem, mLowerLauncherSubsystem));
+    //Ac.whenPressed(new AdjustLauncherCommand(mUpperLauncherSubsystem, mLowerLauncherSubsystem, m_LimeLightSubsystem));
     JoystickButton Bc = new JoystickButton(coDriverOI, 2);
-    Bc.whenPressed(new ChangeLauncherSpeedCommand(0, mLauncherSubsystem));
+    Bc.whenPressed(new ChangeLauncherSpeedCommand(0, mUpperLauncherSubsystem, mLowerLauncherSubsystem));
     JoystickButton Xc = new JoystickButton(coDriverOI, 3);
-    Xc.whenPressed(new ChangeLauncherSpeedCommand(2750, mLauncherSubsystem));// 2950
+    Xc.whenPressed(new ChangeLauncherSpeedCommand(4000, mUpperLauncherSubsystem, mLowerLauncherSubsystem));
+    //Xc.whenPressed(new ChangeLauncherSpeedCommand(2750, mLauncherSubsystem));// 2950
     JoystickButton Yc = new JoystickButton(coDriverOI, 4);
-    Yc.whenPressed(new ChangeLauncherSpeedCommand(3000,mLauncherSubsystem));// 3750
+    Yc.whenPressed(new ChangeLauncherSpeedCommand(4300,mUpperLauncherSubsystem, mLowerLauncherSubsystem));// 3750
     JoystickButton LEFT_BUMPERc = new JoystickButton(coDriverOI, 5);
-    LEFT_BUMPERc.whenHeld(new ChangeLauncherSpeedCommand(-500, mLauncherSubsystem));
+    LEFT_BUMPERc.whenHeld(new ChangeLauncherSpeedCommand(-500, mUpperLauncherSubsystem, mLowerLauncherSubsystem));
     JoystickButton RIGHT_BUMPERc = new JoystickButton(coDriverOI, 6);
     //RIGHT_BUMPERc.whenHeld(m_hopperCommand);
     JoystickButton BACK = new JoystickButton(driverOI, 7);
@@ -143,18 +163,32 @@ public class RobotContainer {
     B.whenPressed(stopIntakeCommand);
     JoystickButton X = new JoystickButton(driverOI, 3);
     X.whenPressed(reverseIntake);
+    //Button Y resets the encoder by bring the arm up slowly to verify location of the intake arm
+    //BEFORE ANY INTAKE, IMPORTANT TO DO THIS
     JoystickButton Y = new JoystickButton(driverOI, 4);
     Y.whenPressed(home);
-    Button dPadRight=new Button(){
+    Button dPadDownCo=new Button(){
       @Override
       public boolean get(){
-        return driverOI.getPOV(0)==90;
+        return coDriverOI.getPOV(0)==180;
       }
     };
-    Button dPadLeft=new Button(){
+    Button dPadUpCo=new Button(){
       @Override
       public boolean get(){
-        return driverOI.getPOV(0)==270;
+        return coDriverOI.getPOV(0)==0||coDriverOI.getPOV(0)==360;
+      }
+    };
+    Button dPadRightCo=new Button(){
+      @Override
+      public boolean get(){
+        return coDriverOI.getPOV(0)==90;
+      }
+    };
+    Button dPadLeftCo=new Button(){
+      @Override
+      public boolean get(){
+        return coDriverOI.getPOV(0)==270;
       }
     };
     Button dPadDown=new Button(){
@@ -169,11 +203,17 @@ public class RobotContainer {
         return driverOI.getPOV(0)==0||driverOI.getPOV(0)==360;
       }
     };
-    dPadRight.whenPressed(new DeployIntakeCommand(mIntakeSubsystem, 1));
-    dPadLeft.whenPressed(new DeployIntakeCommand(mIntakeSubsystem, -1));
-    dPadUp.whenPressed(new HangReachCommand(mhang));
-    dPadDown.whenPressed(new HangPullCommand(mhang));
+    dPadUp.whenPressed(onLEDCommand);
+    dPadDown.whenPressed(offLEDCommand);
+    //dPadUp.whenPressed(new HangReachCommand(mhang));
+    //dPadDown.whenPressed(new HangPullCommand(mhang));
 
+    //Intake Return Home
+    dPadUpCo.whenPressed(new DeployIntakeCommand(mIntakeSubsystem, 1));
+    //Intake Deploy Down Waiting for ball
+    dPadRightCo.whenPressed(new DeployIntakeCommand(mIntakeSubsystem, 0));
+    //Intake Drop for Ball Pickup
+    dPadDownCo.whenPressed(new DeployIntakeCommand(mIntakeSubsystem, -1));
   }
 
   public Command getDriveCommand() {
@@ -181,8 +221,12 @@ public class RobotContainer {
     return m_DriveWithJoysticksCommand;
   }
 
-  public static PIDController getPidController() {
-    return launcherPID;
+  public static PIDController getUpperPIDController() {
+    return upperLauncherPID;
+  }
+
+  public static PIDController getLowerPIDController() {
+    return lowerLauncherPID;
   }
 
   public Command getHopperCommand() {
@@ -197,5 +241,9 @@ public class RobotContainer {
   }
   public Command getStopIntakeCommand(){
     return stopIntakeCommand;
+  }
+  public void disableLEnabled(){
+    mUpperLauncherSubsystem.disableM_Enabled();
+    mLowerLauncherSubsystem.disableM_Enabled();
   }
 }

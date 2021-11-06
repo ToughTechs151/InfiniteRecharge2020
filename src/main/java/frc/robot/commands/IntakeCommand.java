@@ -1,19 +1,19 @@
 package frc.robot.commands;
 
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.IntakeWheelsSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class IntakeCommand extends CommandBase{
-    private IntakeSubsystem intake;
+    private IntakeWheelsSubsystem intake;
     private double speed;
-    private boolean fin;
-    public  IntakeCommand(IntakeSubsystem subsystem, double speed) {
-        intake=subsystem;
+    private boolean fin = false;
+    public  IntakeCommand(IntakeWheelsSubsystem subsystem, double speed) {
+        this.intake=subsystem;
         this.speed=speed;
         addRequirements(intake);
     }
     public void execute(){
-        intake.runIntake(speed);
+        this.intake.runIntake(speed);
         fin=true;
     }
     @Override

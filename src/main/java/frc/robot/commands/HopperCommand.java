@@ -73,6 +73,7 @@ public class HopperCommand extends CommandBase {
         SmartDashboard.putBoolean("gothere", true);
       }
       else{
+        //Not working? 2/8/21
         m_hopperSubsystem.start(-speed);
         SmartDashboard.putBoolean("gothere", true);
       }
@@ -93,9 +94,9 @@ public class HopperCommand extends CommandBase {
                   
                   prevState=true;
                 }
-              },250);
+              },50);
             }
-          },2000);
+          },1500);
         }
       }
       //check to see if the hopper should stop
