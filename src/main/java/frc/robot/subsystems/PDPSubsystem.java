@@ -2,7 +2,9 @@ package frc.robot.subsystems;
 
 import java.util.TimerTask;
 
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+
 import java.util.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;

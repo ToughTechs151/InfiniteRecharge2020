@@ -8,7 +8,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
@@ -17,11 +17,12 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import io.github.oblarg.oblog.annotations.Config;
 import io.github.oblarg.oblog.annotations.Log;
-import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.math.controller.PIDController;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.EncoderType;
+import com.revrobotics.RelativeEncoder;
 
 /**
  * Launcher subsystem
@@ -35,7 +36,7 @@ public class UpperLauncherSubsystem extends PIDSubsystem {
   //3/13/2021 Modifications to Encoder Declaration
   //private static CANEncoder lEncoder = new CANEncoder(launcher1, EncoderType.kQuadrature, 42);
   // Original Encoder Declaration
-  private static CANEncoder Encoder1 = new CANEncoder(launcher1);
+  private static RelativeEncoder Encoder1 = launcher1.getEncoder();
   //private static Talon launcher1 = new Talon(Constants.Launcher1);
   //private static Talon launcher2 = new Talon(Constants.Launcher2);
   private double setpoint = 0;

@@ -2,16 +2,15 @@ package frc.robot.subsystems;
 
 import frc.robot.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 
 
 /**
@@ -22,8 +21,8 @@ public class DriveSubsystem extends SubsystemBase {
   private WPI_VictorSPX backRight;
   private WPI_VictorSPX frontLeft;
   private WPI_VictorSPX backLeft;
-  private SpeedControllerGroup left;
-  private SpeedControllerGroup right;
+  private MotorControllerGroup left;
+  private MotorControllerGroup right;
   /**
    * The subsystem for the main drivetrain's constructor
    */
@@ -34,12 +33,11 @@ public class DriveSubsystem extends SubsystemBase {
     frontLeft = new WPI_VictorSPX(Constants.FRONT_LEFT);
     backLeft = new WPI_VictorSPX(Constants.BACK_LEFT);
     //Group drive motors based on location  
-    right = new SpeedControllerGroup(frontRight, backRight);
-    left = new SpeedControllerGroup(frontLeft, backLeft);
+    right = new MotorControllerGroup(frontRight, backRight);
+    left = new MotorControllerGroup(frontLeft, backLeft);
 
     driveTrain = new DifferentialDrive(right, left);
     //adjust for which side of the robot should be front.
-    left.setInverted(true);
     right.setInverted(true);
     
   }
